@@ -48,12 +48,21 @@ userSchema.methods.hashPassword = function (plainText) {
     return bcrypt.hash(plainText, 10).then(hash => {
         user.password = hash
     })
+    
   }
   
-  userSchema.methods.comparePassword = function (password) {
-      return bcrypt.compare(password, this.password)
-  }
+userSchema.methods.comparePassword = function (password) {
+    return bcrypt.compare(password, this.password)
+}
+
+userSchema.methods.sanitize = function () {
+return {
+    ...this._doc,
+    password: undefined
+}
+}
   
+const User = mongoose.model("User", userSchema)
   
-//   module.exports = User
-  
+module.exports = User
+

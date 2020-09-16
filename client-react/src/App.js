@@ -26,7 +26,24 @@ const socket = io()
 class App extends React.Component {
   constructor (props) {
     super(props)
-    this.state = { messages: [], nick: null, loggedIn: false }
+    this.state = { messages: [], nick: null, loggedIn: false, errorMessage: ''}
+    this.register = this.register.bind(this)
+  }
+
+  register(data) {
+    // const data={ username: "Johnny", password: "321" }
+    // Default options are marked with *
+    fetch('/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data) // body data type must match "Content-Type" header
+    })
+    .then (res => res.json()) 
+    .then (data => this.setState({ errorMessage: data.error, registered: data.error ? false: true }))
+    .catch (err => console.log(err))
+    // return response.json(); // parses JSON response into native JavaScript objects
   }
 
   componentDidMount () {
@@ -44,12 +61,21 @@ class App extends React.Component {
         this.setState({ messages: data })
       })
   }
-  loginFunc(nick, password) {
-    this.setState({
-      nick: nick,
-      loggedIn: true,
+  loginFunc(data) {
+    
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data) // body data type must match "Content-Type" header
     })
+    .then (res => res.json()) 
+    .then (data =>   this.setState({ errorMessage: data.error, loggedIn: data.error ? false: true })) //this is where our custom error msg prints
+    // this.setState({ errorMessage: data.error })
+    .catch (err => console.log(err))//when exception is thrown it will end up here - so error message ain't here
   }
+  
 
   sendMessage (text, messageRoom) {
     const message = { text: text, nick: this.state.nick, room: messageRoom, date: new Date() }
@@ -76,6 +102,7 @@ class App extends React.Component {
   render () {
     return (
       <Router>
+        {/* <button onClick={this.signUp}>Sign Up or Whatever</button> */}
         <div>
           <div className="logo">
             <img src={logo} alt="logo"/>
@@ -89,7 +116,7 @@ class App extends React.Component {
               {this.state.loggedIn 
                 ?
               <li>
-                <Link to="/logout" onClick={this.logMeOut.bind(this)}><button>Log {this.state.nick} Out</button></Link>}
+                <Link to="/logout" onClick={this.logMeOut.bind(this)}><button>Log {this.state.nick} Out</button></Link>
               </li> 
                 : ''}
               <li>
@@ -108,7 +135,9 @@ class App extends React.Component {
           <Route path="/signup">
           {this.state.loggedIn 
             ? <Redirect to="/" />  
-            : <Signup loginFunc={this.loginFunc.bind(this)}/>}
+            : this.state.registered 
+              ? <Redirect to="/login" /> 
+              : <Signup register={this.register.bind(this)}/>}
           </Route>
 
           <Route path="/logout" >
@@ -118,7 +147,7 @@ class App extends React.Component {
           <Route path="/login">
           {this.state.loggedIn 
             ? <Redirect to="/" />
-            : <LoginForm loginFunc={this.loginFunc.bind(this)}/>}
+            : [<LoginForm loginFunc={this.loginFunc.bind(this)}/>, <div>{this.state.errorMessage}</div>]}
 
           </Route>
           <Route path="/rooms/:room">

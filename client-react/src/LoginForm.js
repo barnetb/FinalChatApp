@@ -11,7 +11,11 @@ class loginForm extends React.Component {
 
   handleSubmit (evt) {
     evt.preventDefault()
-    this.props.loginFunc(this.state.nick, this.state.password)
+    const data = {
+      username: this.state.nick,
+      password: this.state.password
+    }
+    this.props.loginFunc(data)
   }
 
   handleLoginChange (event) {
@@ -29,7 +33,7 @@ class loginForm extends React.Component {
           <input id='nickname' type='text' placeholder='Enter nickname...' value={this.state.nick} onChange={this.handleLoginChange.bind(this)} />
         </div>
         <div>
-          <input id='password' type='text' placeholder='Enter password...' value={this.state.password} onChange={this.handlePasswordChange.bind(this)} />
+          <input id='password' type='password' placeholder='Enter password...' value={this.state.password} onChange={this.handlePasswordChange.bind(this)} />
         </div>
         <div>
           <button type='submit'>Login</button>

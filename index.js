@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const port = 8000
 // const MESSAGES_PATH = './messages.txt'
 
-// const app = require('./app')({ messagesPath: MESSAGES_PATH })
+const app = require('./app')()
 
 const connectDatabase = async (hostname, databaseName) => {
     const database = await mongoose.connect(

@@ -15,7 +15,12 @@ class Signup extends React.Component {
   
     handleSubmit (evt) {
       evt.preventDefault()
-      this.props.loginFunc(this.state.nick, this.state.password)
+      const data = {
+        username: this.state.nick,
+        password: this.state.password
+      }
+      this.props.register(data)
+      // this.props.loginFunc(this.state.nick, this.state.password)
     }
   
     handleChange (evt, key) {
