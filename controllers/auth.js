@@ -16,8 +16,10 @@ router.post('/signup', (req, res) => {
 })
 
 router.post('/login', (req, res) => {
+  console.log(req.body)
   User.findOne({ username: req.body.username }, async (err, user) => {
     if (err) return res.status(500).send(err)
+    if (!user) return res.status(400).send({error: 'username invalid'})
 
     const matchingPassword = await user.comparePassword(req.body.password)
 
@@ -27,7 +29,9 @@ router.post('/login', (req, res) => {
       _id: user._id
     }, 'CHANGEME!')
 
-    res.send({ token })
+    res.send({
+      username: req.body.username,
+      token })
   })
 })
 

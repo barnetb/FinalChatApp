@@ -16,17 +16,12 @@ import {
 import './App.css'
 import logo from './chat_title_2.png'
 
-
-
-
 const socket = io()
-
-
 
 class App extends React.Component {
   constructor (props) {
     super(props)
-    this.state = { messages: [], nick: null, loggedIn: false, errorMessage: ''}
+    this.state = { messages: [], nick: null, loggedIn: false, errorMessage: '', room:'random'}
     this.register = this.register.bind(this)
   }
 
@@ -58,6 +53,7 @@ class App extends React.Component {
       .then(response => response.json())
       .then(data => {
         console.log('fetched data from server')
+        console.log(data)
         this.setState({ messages: data })
       })
   }
@@ -71,8 +67,15 @@ class App extends React.Component {
       body: JSON.stringify(data) // body data type must match "Content-Type" header
     })
     .then (res => res.json()) 
-    .then (data =>   this.setState({ errorMessage: data.error, loggedIn: data.error ? false: true })) //this is where our custom error msg prints
-    // this.setState({ errorMessage: data.error })
+    .then (data => {
+      this.setState({
+        errorMessage: data.error,
+        loggedIn: data.error 
+          ? false: true,  
+        nick: data.username
+      })
+    }) //this is where our custom error msg prints
+
     .catch (err => console.log(err))//when exception is thrown it will end up here - so error message ain't here
   }
   
@@ -137,7 +140,7 @@ class App extends React.Component {
             ? <Redirect to="/" />  
             : this.state.registered 
               ? <Redirect to="/login" /> 
-              : <Signup register={this.register.bind(this)}/>}
+              : [<Signup register={this.register.bind(this)}/>,  <div>{this.state.errorMessage}</div>]}
           </Route>
 
           <Route path="/logout" >

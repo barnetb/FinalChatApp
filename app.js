@@ -1,5 +1,6 @@
 // import controllers
 const AuthController = require('./controllers/auth')
+const GetController = require('./controllers/get-messages')
 // const ProtectedController = require('./controllers/protected')
 
 
@@ -12,8 +13,7 @@ module.exports = function (deps) {
   app.use(express.static('static'))
   app.use(express.json())
   app.use('/', AuthController)
-
-
+  app.use('/', GetController)
 
   // app.get('/messages', (req, res) => {
   //   fs.readFile(deps.messagesPath, 'utf8', (err, text) => {
