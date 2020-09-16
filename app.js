@@ -1,6 +1,11 @@
 // import controllers
 const AuthController = require('./controllers/auth')
 const GetController = require('./controllers/get-messages')
+const Message = require('./models/Messages')
+const { userInfo } = require('os')
+const jwt = require('jsonwebtoken')
+
+
 // const ProtectedController = require('./controllers/protected')
 
 
@@ -46,6 +51,18 @@ module.exports = function (deps) {
 
     socket.on('chat message', (msg) => {
       io.emit('chat message', msg)
+    
+      
+        if (jwt.verify(msg.userId, 'CHANGEME!')) {
+          const user = jwt.decode(msg.userId, 'CHANGEME!')
+          
+        
+          Message.submitMessage(user._id, msg.text, msg.room)
+        } else {
+          console.log('json web token failed')
+        }
+    
+
       // fs.appendFile(deps.messagesPath, '\n' + JSON.stringify(msg), err => err ? console.log(err) : null)
     })
 

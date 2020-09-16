@@ -21,7 +21,7 @@ const socket = io()
 class App extends React.Component {
   constructor (props) {
     super(props)
-    this.state = { messages: [], nick: null, loggedIn: false, errorMessage: '', room:'random'}
+    this.state = { messages: [], nick: null, loggedIn: false, errorMessage: '', room:'random', userId: ''}
     this.register = this.register.bind(this)
   }
 
@@ -72,7 +72,8 @@ class App extends React.Component {
         errorMessage: data.error,
         loggedIn: data.error 
           ? false: true,  
-        nick: data.username
+        nick: data.username,
+        userId: data.token
       })
     }) //this is where our custom error msg prints
 
@@ -81,7 +82,7 @@ class App extends React.Component {
   
 
   sendMessage (text, messageRoom) {
-    const message = { text: text, nick: this.state.nick, room: messageRoom, date: new Date() }
+    const message = { text: text, nick: this.state.nick, room: messageRoom, userId: this.state.userId }
     socket.emit('chat message', message)
   }
 

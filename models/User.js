@@ -16,24 +16,7 @@ const userSchema = new mongoose.Schema({
 })
 
 
-const messageSchema = new mongoose.Schema({
-    text: {
-        type: String,
-        required: true,
-    },
-    room: {
-        type: String,
-        required: true,
-    },
-    date: {
-        type: Date,
-        required: true,
-    },
-    user: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'User',
-        required: true,
-    }
-})
+
 
 userSchema.statics.signUp = async function (username, password) {
     const user = new this()
