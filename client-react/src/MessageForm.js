@@ -9,6 +9,7 @@ class MessageForm extends React.Component {
   handleSubmit (evt) {
     evt.preventDefault()
     this.props.sendMessage(this.state.formValue, this.props.room)
+    this.setState({ formValue: '' })
   }
 
   handleChange (event) {
@@ -26,3 +27,7 @@ class MessageForm extends React.Component {
 }
 
 export default MessageForm
+
+//protect backend fetch route so that it does NOT send error if user has not logged in/sent JWT
+
+//in the event someone uses Postman or CURL it will act differently based on authentication

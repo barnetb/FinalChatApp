@@ -15,6 +15,7 @@ import {
 } from "react-router-dom"
 import './App.css'
 import logo from './chat_title_2.png'
+const jwt = require('jsonwebtoken')
 
 const socket = io()
 
@@ -48,14 +49,6 @@ class App extends React.Component {
       this.setState({ messages: this.state.messages.concat(msg) })
     })
 
-    // Get initial list of messages
-    fetch('/messages')
-      .then(response => response.json())
-      .then(data => {
-        console.log('fetched data from server')
-        console.log(data)
-        this.setState({ messages: data })
-      })
   }
   loginFunc(data) {
     
@@ -74,10 +67,24 @@ class App extends React.Component {
           ? false: true,  
         nick: data.username,
         userId: data.token
+        
       })
+          // Get initial list of messages
+    fetch('/messages', {
+      headers: {
+        Authorization: `Bearer ${data.token}`
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('fetched data from server')
+          console.log(data)
+          this.setState({ messages: data })
+        })
     }) //this is where our custom error msg prints
 
     .catch (err => console.log(err))//when exception is thrown it will end up here - so error message ain't here
+    
   }
   
 

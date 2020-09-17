@@ -21,12 +21,12 @@ const messageSchema = new mongoose.Schema({
         required: true,
     }
 })
-messageSchema.statics.submitMessage = async function (user, text, room) {
+messageSchema.statics.submitMessage = async function (user, text, room, newDate) {
     const message = new this()
     message.user = user
     message.room = room
     message.text = text
-    message.date = new Date()
+    message.date = newDate
     await message.save()
     return message
   }

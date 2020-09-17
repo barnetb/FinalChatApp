@@ -55,11 +55,13 @@ module.exports = function (deps) {
         try {
           if (jwt.verify(msg.userId, 'CHANGEME!')) {
             const user = jwt.decode(msg.userId, 'CHANGEME!')
+            const newDate = new Date()
             User.findOne({ _id: user._id }, async (err, person) => {
-              const formattedMsg = {user: {username: person.username}, text: msg.text, room: msg.room, date: msg.date} 
+              const formattedMsg = {user: {username: person.username}, text: msg.text, room: msg.room, date: newDate} 
+              console.log(formattedMsg)
               io.emit('chat message', formattedMsg)
             })
-            Message.submitMessage(user._id, msg.text, msg.room)
+            Message.submitMessage(user._id, msg.text, msg.room, newDate)
           } else {
             console.log('json web token failed')
           } 
