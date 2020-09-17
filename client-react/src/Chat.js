@@ -5,7 +5,7 @@ import MessageForm from './MessageForm'
 function Message (props) {
   return (
     <li className='message-item'>
-      <span className='nick'><strong>{props.message.nick}<span style={{color:"red"}}>: </span></strong></span>
+      <span className='nick'><strong>{props.message.user.username}<span style={{color:"red"}}>: </span></strong></span>
       <span className='text'>{props.message.text}</span>
       <span className='date'>  ({(new Date(props.message.date)).toLocaleString()})</span>
     </li>

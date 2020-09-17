@@ -4,6 +4,8 @@ const GetController = require('./controllers/get-messages')
 const Message = require('./models/Messages')
 const { userInfo } = require('os')
 const jwt = require('jsonwebtoken')
+const User = require('./models/User')
+
 
 
 // const ProtectedController = require('./controllers/protected')
@@ -50,18 +52,21 @@ module.exports = function (deps) {
     console.log('a user connected')
 
     socket.on('chat message', (msg) => {
-      io.emit('chat message', msg)
-    
-      
-        if (jwt.verify(msg.userId, 'CHANGEME!')) {
-          const user = jwt.decode(msg.userId, 'CHANGEME!')
-          
-        
-          Message.submitMessage(user._id, msg.text, msg.room)
-        } else {
-          console.log('json web token failed')
+        try {
+          if (jwt.verify(msg.userId, 'CHANGEME!')) {
+            const user = jwt.decode(msg.userId, 'CHANGEME!')
+            User.findOne({ _id: user._id }, async (err, person) => {
+              const formattedMsg = {user: {username: person.username}, text: msg.text, room: msg.room, date: msg.date} 
+              io.emit('chat message', formattedMsg)
+            })
+            Message.submitMessage(user._id, msg.text, msg.room)
+          } else {
+            console.log('json web token failed')
+          } 
+        } catch(err) {
+          console.log(err)
         }
-    
+        
 
       // fs.appendFile(deps.messagesPath, '\n' + JSON.stringify(msg), err => err ? console.log(err) : null)
     })
