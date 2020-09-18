@@ -122,6 +122,9 @@ class App extends React.Component {
           <div className="table">
             <ul id="horizontal-list">
               <li>
+                <Link to="/"><button>Home</button></Link>
+              </li>
+              <li>
                 <Link to="/signup"><button>Sign Up</button></Link>
               </li>
               {this.state.loggedIn 
@@ -133,12 +136,12 @@ class App extends React.Component {
               <li>
                 <Link to="/login"><button>Log In</button></Link>
               </li>
+              {this.state.loggedIn
+              ?
               <li>
                 <Link to="/rooms/general"><button>Chat</button></Link>
               </li>
-              <li>
-                <Link to="/"><button>Home</button></Link>
-              </li>
+              : ''}
             </ul>
           </div>
         </div>
@@ -162,7 +165,9 @@ class App extends React.Component {
 
           </Route>
           <Route path="/rooms/:room">
-            <Chat sendMessage={this.sendMessage.bind(this)} messages={this.state.messages}/>
+          {this.state.loggedIn
+            ? <Chat sendMessage={this.sendMessage.bind(this)} messages={this.state.messages}/>
+            : <Redirect to="/login" />}
           </Route>
           <Route path="/">
           {this.state.loggedIn
