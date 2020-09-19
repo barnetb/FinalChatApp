@@ -7,8 +7,9 @@ const jwt = require('jsonwebtoken')
 const User = require('./models/User')
 
 
-
 // const ProtectedController = require('./controllers/protected')
+
+
 
 
 module.exports = function (deps) {
@@ -17,10 +18,20 @@ module.exports = function (deps) {
 
   const app = express()
 
-  app.use(express.static('static'))
+
+
+  // app.use(express.static('static'))
+
+  app.use(express.static(path.join(__dirname, 'client-react/build')))
+  app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, 'client-react/build', 'index.html'))
+  })
+
   app.use(express.json())
   app.use('/', AuthController)
   app.use('/', GetController)
+
+
 
   // app.get('/messages', (req, res) => {
   //   fs.readFile(deps.messagesPath, 'utf8', (err, text) => {
