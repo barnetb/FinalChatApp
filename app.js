@@ -72,6 +72,9 @@ module.exports = function (deps) {
 
       // fs.appendFile(deps.messagesPath, '\n' + JSON.stringify(msg), err => err ? console.log(err) : null)
     })
+    // const port = process.env.PORT || 3000;
+    // app.listen(port);
+    // console.log(`Password generator listening on ${port}`);
 
     socket.on('disconnect', () => {
       console.log('user disconnected')

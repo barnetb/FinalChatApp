@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npx tape test.js | npx tap-spec",
     "watch-server": "npx nodemon index.js",
-    "watch-client": "npx watchify client/main.js -o static/bundle.js --debug --verbose"
+    "watch-client": "npx watchify client/main.js -o static/bundle.js --debug --verbose",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
