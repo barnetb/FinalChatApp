@@ -7,7 +7,7 @@
     "test": "npx tape test.js | npx tap-spec",
     "watch-server": "npx nodemon index.js",
     "watch-client": "npx watchify client/main.js -o static/bundle.js --debug --verbose",
-    "start": "node app.js",
+    "start": "node index.js",
     "heroku-postbuild": "cd client-react && npm install && npm run build"
   },
   "author": "",
